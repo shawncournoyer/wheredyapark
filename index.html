@@ -87,6 +87,10 @@
 /* Paste your Apps Script web app URL here (Deploy > Manage deployments). */
 var EXEC = 'https://script.google.com/macros/s/AKfycbz9Hrf5cW5q79DOLRurs_bpHfEZLMYHXxUxbwEftmbbx0RrtQoqspdzzR80od_2PYZO2g/exec';
 
+/* Storage keys are prefixed "wdp" on purpose: every app under
+   shawncournoyer.github.io shares ONE localStorage, so a generic key like
+   "appToken" would pick up (and overwrite) G Commute's token. */
+
 /* Banner height in CSS pixels. NOT the same on every device: phone and desktop
    differ and Google changes it. So it is tunable at runtime and the tuned value
    is stored, because the installed app launches start_url "./" with no
@@ -97,7 +101,7 @@ var BANNER_SET = false;
 /* Note the isFinite check: +null is 0, so a plain ">= 0" test on an unset key
    silently sets the crop to zero and the banner comes back. */
 try {
-  var b = localStorage.getItem('appBanner');
+  var b = localStorage.getItem('wdpBanner');
   if (b !== null && isFinite(+b) && +b >= 0) { BANNER = +b; BANNER_SET = true; }
 } catch (e) {}
 
@@ -125,7 +129,7 @@ function readHash() {
 function setBanner(n) {
   BANNER = Math.max(0, Math.min(200, n | 0));
   BANNER_SET = true;
-  try { localStorage.setItem('appBanner', String(BANNER)); } catch (e) {}
+  try { localStorage.setItem('wdpBanner', String(BANNER)); } catch (e) {}
 }
 
 /* The token is remembered on this origin after the first visit. It has to be:
@@ -137,11 +141,11 @@ function loadToken() {
   readHash();
   if (hash.t !== undefined) {
     TOKEN = hash.t;
-    try { TOKEN ? localStorage.setItem('appToken', TOKEN) : localStorage.removeItem('appToken'); }
+    try { TOKEN ? localStorage.setItem('wdpToken', TOKEN) : localStorage.removeItem('wdpToken'); }
     catch (e) {}
     return;
   }
-  try { TOKEN = localStorage.getItem('appToken') || ''; } catch (e) { TOKEN = ''; }
+  try { TOKEN = localStorage.getItem('wdpToken') || ''; } catch (e) { TOKEN = ''; }
 }
 loadToken();
 
@@ -175,7 +179,7 @@ function size() {
    some mobile paste targets turn "#" into part of the path, which is a 404 on
    GitHub Pages. Everything here has to survive that. */
 if (/[?&]reset=1\b/.test(location.search)) {
-  try { localStorage.removeItem('appToken'); } catch (e) {}
+  try { localStorage.removeItem('wdpToken'); } catch (e) {}
   TOKEN = '';
 }
 
@@ -206,7 +210,7 @@ document.getElementById('form').addEventListener('submit', function (ev) {
   }
   err.textContent = '';
   TOKEN = v;
-  try { localStorage.setItem('appToken', TOKEN); } catch (e) {}
+  try { localStorage.setItem('wdpToken', TOKEN); } catch (e) {}
   start();
 });
 
