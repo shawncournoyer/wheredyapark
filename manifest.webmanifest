@@ -1,12 +1,13 @@
 {
-  "name": "Chess Insights",
-  "short_name": "Chess",
+  "name": "Wheredyapark",
+  "short_name": "Wheredyapark",
+  "description": "Where the car is, where it has been, and when it has to move.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#141413",
-  "theme_color": "#141413",
+  "background_color": "#0E1116",
+  "theme_color": "#0E1116",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
